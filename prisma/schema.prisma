@@ -19,3 +19,15 @@ model Post {
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
 }
+
+model Transaction {
+  id          String            @id @default(uuid())
+  userId      String
+  type        String
+  amount      Float
+  date        TimestamptzString @default(now())
+  description String
+  createdAt   TimestamptzString @default(now())
+  updatedAt   temporal.updatedAtString()
+}
+

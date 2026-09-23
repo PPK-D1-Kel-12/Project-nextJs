@@ -9,10 +9,11 @@ const globalForDb = globalThis as unknown as {
 
 export const db =
   globalForDb.db ??
-  postgres<Contract>({
-    contractJson,
-    url: process.env['DATABASE_URL'] || '',
-  });
+  (process.env['DATABASE_URL']
+    ? postgres<Contract>({
+        contractJson,
+        url: process.env['DATABASE_URL'],
+      })
+    : ({} as any));
 
-if (process.env.NODE_ENV !== 'production') globalForDb.db = db;
-
+if (process.env.NODE_ENV !== 'production' && db) globalForDb.db = db;
