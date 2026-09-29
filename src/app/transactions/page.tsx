@@ -20,6 +20,10 @@ export default function TransactionsPage() {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
 
+  // Pagination state (SRS-08)
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 10;
+
   // Modal & Edit state (SRS-07, SRS-09)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [transactionToEdit, setTransactionToEdit] = useState<TransactionItem | null>(null);
@@ -28,6 +32,12 @@ export default function TransactionsPage() {
   const [transactionToDelete, setTransactionToDelete] = useState<TransactionItem | null>(null);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  // Sliced data pagination (SRS-08)
+  const totalPages = Math.max(1, Math.ceil(transactions.length / pageSize));
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, transactions.length);
+  const paginatedTransactions = transactions.slice(startIndex, endIndex);
 
   // Initial load via effect without synchronous setState
   useEffect(() => {
@@ -80,6 +90,7 @@ export default function TransactionsPage() {
 
   const handleApplyFilter = (e: React.FormEvent) => {
     e.preventDefault();
+    setCurrentPage(1);
     executeFilterQuery({
       type: typeFilter,
       startDate: startDate || undefined,
@@ -91,6 +102,7 @@ export default function TransactionsPage() {
     setTypeFilter('ALL');
     setStartDate('');
     setEndDate('');
+    setCurrentPage(1);
     executeFilterQuery({
       type: 'ALL',
       startDate: undefined,
@@ -315,114 +327,154 @@ export default function TransactionsPage() {
             </div>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  <th className="py-3.5 px-6">Tanggal</th>
-                  <th className="py-3.5 px-6">Keterangan</th>
-                  <th className="py-3.5 px-6">Jenis</th>
-                  <th className="py-3.5 px-6 text-right">Nominal</th>
-                  <th className="py-3.5 px-6 text-center">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80 text-sm">
-                {transactions.map((tx) => {
-                  const isIncome = tx.type === 'INCOME';
-                  return (
-                    <tr
-                      key={tx.id}
-                      className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors"
-                    >
-                      {/* Tanggal */}
-                      <td className="py-4 px-6 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400 font-medium">
-                        {formatDate(tx.date)}
-                      </td>
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    <th className="py-3.5 px-6">Tanggal</th>
+                    <th className="py-3.5 px-6">Keterangan</th>
+                    <th className="py-3.5 px-6">Jenis</th>
+                    <th className="py-3.5 px-6 text-right">Nominal</th>
+                    <th className="py-3.5 px-6 text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80 text-sm">
+                  {paginatedTransactions.map((tx) => {
+                    const isIncome = tx.type === 'INCOME';
+                    return (
+                      <tr
+                        key={tx.id}
+                        className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors"
+                      >
+                        {/* Tanggal */}
+                        <td className="py-4 px-6 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400 font-medium">
+                          {formatDate(tx.date)}
+                        </td>
 
-                      {/* Keterangan */}
-                      <td className="py-4 px-6 font-semibold text-slate-900 dark:text-white max-w-xs truncate">
-                        {tx.description}
-                      </td>
+                        {/* Keterangan */}
+                        <td className="py-4 px-6 font-semibold text-slate-900 dark:text-white max-w-xs truncate">
+                          {tx.description}
+                        </td>
 
-                      {/* Jenis Badge */}
-                      <td className="py-4 px-6 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
-                            isIncome
-                              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-                              : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
-                          }`}
-                        >
-                          {isIncome ? (
-                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="m7 7 10 10" />
-                              <path d="M17 7v10H7" />
-                            </svg>
-                          ) : (
-                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M7 17 17 7" />
-                              <path d="M7 7h10v10" />
-                            </svg>
-                          )}
-                          <span>{isIncome ? 'Pemasukan' : 'Pengeluaran'}</span>
-                        </span>
-                      </td>
-
-                      {/* Nominal */}
-                      <td className="py-4 px-6 whitespace-nowrap text-right font-mono font-bold">
-                        <span
-                          className={
-                            isIncome
-                              ? 'text-emerald-600 dark:text-emerald-400'
-                              : 'text-rose-600 dark:text-rose-400'
-                          }
-                        >
-                          {formatRupiah(tx.amount, { type: tx.type })}
-                        </span>
-                      </td>
-
-                      {/* Aksi (SRS-09, SRS-10) */}
-                      <td className="py-4 px-6 whitespace-nowrap text-center">
-                        <div className="inline-flex items-center gap-1.5">
-                          {/* Tombol Ubah (SRS-09) */}
-                          <button
-                            type="button"
-                            onClick={() => handleOpenEdit(tx)}
-                            title="Ubah Transaksi"
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-medium transition-colors cursor-pointer"
+                        {/* Jenis Badge */}
+                        <td className="py-4 px-6 whitespace-nowrap">
+                          <span
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
+                              isIncome
+                                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                                : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
+                            }`}
                           >
-                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                              <path d="m15 5 4 4" />
-                            </svg>
-                            <span>Ubah</span>
-                          </button>
+                            {isIncome ? (
+                              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="m7 7 10 10" />
+                                <path d="M17 7v10H7" />
+                              </svg>
+                            ) : (
+                              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M7 17 17 7" />
+                                <path d="M7 7h10v10" />
+                              </svg>
+                            )}
+                            <span>{isIncome ? 'Pemasukan' : 'Pengeluaran'}</span>
+                          </span>
+                        </td>
 
-                          {/* Tombol Hapus (SRS-10) */}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setDeleteError(null);
-                              setTransactionToDelete(tx);
-                            }}
-                            title="Hapus Transaksi"
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-rose-200 dark:border-rose-900/60 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-medium transition-colors cursor-pointer"
+                        {/* Nominal */}
+                        <td className="py-4 px-6 whitespace-nowrap text-right font-mono font-bold">
+                          <span
+                            className={
+                              isIncome
+                                ? 'text-emerald-600 dark:text-emerald-400'
+                                : 'text-rose-600 dark:text-rose-400'
+                            }
                           >
-                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M3 6h18" />
-                              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                            </svg>
-                            <span>Hapus</span>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                            {formatRupiah(tx.amount, { type: tx.type })}
+                          </span>
+                        </td>
+
+                        {/* Aksi (SRS-09, SRS-10) */}
+                        <td className="py-4 px-6 whitespace-nowrap text-center">
+                          <div className="inline-flex items-center gap-1.5">
+                            {/* Tombol Ubah (SRS-09) */}
+                            <button
+                              type="button"
+                              onClick={() => handleOpenEdit(tx)}
+                              title="Ubah Transaksi"
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-medium transition-colors cursor-pointer"
+                            >
+                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                <path d="m15 5 4 4" />
+                              </svg>
+                              <span>Ubah</span>
+                            </button>
+
+                            {/* Tombol Hapus (SRS-10) */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setDeleteError(null);
+                                setTransactionToDelete(tx);
+                              }}
+                              title="Hapus Transaksi"
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-rose-200 dark:border-rose-900/60 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-medium transition-colors cursor-pointer"
+                            >
+                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M3 6h18" />
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                              </svg>
+                              <span>Hapus</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination Controls (SRS-08) */}
+            {transactions.length > 0 && (
+              <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+                <div className="text-slate-500 dark:text-slate-400">
+                  Menampilkan <span className="font-semibold text-slate-900 dark:text-white">{startIndex + 1}</span> sampai{' '}
+                  <span className="font-semibold text-slate-900 dark:text-white">{endIndex}</span> dari{' '}
+                  <span className="font-semibold text-slate-900 dark:text-white">{transactions.length}</span> transaksi
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                    disabled={currentPage === 1}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-colors cursor-pointer"
+                  >
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                    <span>Sebelumnya</span>
+                  </button>
+                  <span className="px-2 text-slate-600 dark:text-slate-400 font-medium">
+                    Halaman {currentPage} dari {totalPages}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                    disabled={currentPage === totalPages}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-colors cursor-pointer"
+                  >
+                    <span>Selanjutnya</span>
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
 
