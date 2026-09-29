@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { toggleTheme } from '@/actions/theme';
+import { LogoutButton } from './auth/logout-button';
 
 interface NavbarProps {
   initialTheme?: 'light' | 'dark';
@@ -14,6 +15,11 @@ export function Navbar({ initialTheme = 'light', userName = 'Bram' }: NavbarProp
   const pathname = usePathname();
   const [isDark, setIsDark] = useState<boolean>(initialTheme === 'dark');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Jangan tampilkan navbar di halaman auth
+  if (pathname === '/login' || pathname === '/register') {
+    return null;
+  }
 
   const handleToggleTheme = async () => {
     const isCurrentlyDark = document.documentElement.classList.contains('dark');
@@ -134,6 +140,11 @@ export function Navbar({ initialTheme = 'light', userName = 'Bram' }: NavbarProp
             )}
           </button>
 
+          {/* Logout Button (SRS-04) */}
+          <div className="hidden sm:block">
+            <LogoutButton className="px-3 py-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer" />
+          </div>
+
           {/* Mobile Menu Button */}
           <button
             type="button"
@@ -181,6 +192,9 @@ export function Navbar({ initialTheme = 'light', userName = 'Bram' }: NavbarProp
               </Link>
             );
           })}
+          <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            <LogoutButton className="w-full justify-center px-3 py-2 text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer" />
+          </div>
         </div>
       )}
     </header>

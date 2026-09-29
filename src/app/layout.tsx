@@ -16,7 +16,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Expense Tracker - Kelola Keuangan Pribadi',
+  title: {
+    template: '%s | Expense Tracker',
+    default: 'Expense Tracker - Kelola Keuangan Pribadi',
+  },
   description: 'Aplikasi pencatatan pengeluaran dan pemasukan keuangan modern',
 };
 
