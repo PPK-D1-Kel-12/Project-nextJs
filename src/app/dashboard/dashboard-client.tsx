@@ -14,6 +14,7 @@ interface DashboardClientProps {
 export function DashboardClient({ summary }: DashboardClientProps) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isDeficit = summary.balance < 0;
 
   const handleTransactionSuccess = () => {
     // Re-fetch data Server Component di background
@@ -50,24 +51,60 @@ export function DashboardClient({ summary }: DashboardClientProps) {
       {/* 3 Metric Cards (SRS-05) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* Card 1: Saldo Bersih */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-xs relative overflow-hidden transition-all">
+        <div
+          className={`p-6 rounded-2xl border shadow-xs relative overflow-hidden transition-all ${
+            isDeficit
+              ? 'bg-rose-50/40 dark:bg-rose-950/20 border-rose-200 dark:border-rose-900/60'
+              : 'bg-white dark:bg-slate-900/90 border-slate-200/80 dark:border-slate-800'
+          }`}
+        >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            <span
+              className={`text-xs font-semibold uppercase tracking-wider ${
+                isDeficit ? 'text-rose-600 dark:text-rose-400' : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
               Saldo Bersih
             </span>
-            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="20" height="14" x="2" y="5" rx="2" />
-                <line x1="2" x2="22" y1="10" y2="10" />
-              </svg>
+            <div
+              className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                isDeficit
+                  ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+              }`}
+            >
+              {isDeficit ? (
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect width="20" height="14" x="2" y="5" rx="2" />
+                  <line x1="2" x2="22" y1="10" y2="10" />
+                </svg>
+              )}
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white font-mono">
+            <div
+              className={`text-2xl sm:text-3xl font-bold tracking-tight font-mono ${
+                isDeficit ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white'
+              }`}
+            >
               {formatRupiah(summary.balance)}
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Selisih total pemasukan dikurangi pengeluaran
+            <p className="text-xs mt-1">
+              {isDeficit ? (
+                <span className="font-semibold text-rose-600 dark:text-rose-400">
+                  Peringatan: Pengeluaran melebihi pemasukan (Defisit)
+                </span>
+              ) : (
+                <span className="text-slate-500 dark:text-slate-400">
+                  Selisih total pemasukan dikurangi pengeluaran
+                </span>
+              )}
             </p>
           </div>
         </div>
