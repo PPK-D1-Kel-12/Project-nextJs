@@ -8,7 +8,10 @@ export const metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-zinc-50 dark:bg-black font-sans">
+    <div
+      suppressHydrationWarning
+      className="min-h-screen flex items-center justify-center p-4 bg-zinc-50 dark:bg-black font-sans"
+    >
       <Suspense fallback={<div className="p-8 text-center text-zinc-500">Memuat form login...</div>}>
         <LoginForm />
       </Suspense>

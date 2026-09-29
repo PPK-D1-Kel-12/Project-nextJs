@@ -7,12 +7,20 @@ const globalForDb = globalThis as unknown as {
   db?: ReturnType<typeof postgres<Contract>>;
 };
 
+const rawDbUrl = process.env['DATABASE_URL'];
+const isValidDbUrl = Boolean(
+  rawDbUrl &&
+  !rawDbUrl.includes('[PROJECT-REF]') &&
+  !rawDbUrl.includes('[YOUR-PASSWORD]') &&
+  !rawDbUrl.includes('[REGION]')
+);
+
 export const db =
   globalForDb.db ??
-  (process.env['DATABASE_URL']
+  (isValidDbUrl
     ? postgres<Contract>({
         contractJson,
-        url: process.env['DATABASE_URL'],
+        url: rawDbUrl!,
       })
     : ({} as any));
 

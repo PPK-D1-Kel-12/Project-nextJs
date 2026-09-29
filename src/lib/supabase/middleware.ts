@@ -6,13 +6,41 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-    '';
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-  const supabase = createServerClient(supabaseUrl, supabaseKey, {
+  const isConfigured = Boolean(
+    supabaseUrl &&
+    supabaseKey &&
+    !supabaseUrl.includes('[PROJECT-REF]') &&
+    !supabaseUrl.includes('placeholder')
+  );
+
+  if (!isConfigured) {
+    const demoCookie = request.cookies.get('demo_auth_session');
+    let user = null;
+    if (demoCookie?.value) {
+      try {
+        const parsed = JSON.parse(demoCookie.value);
+        user = {
+          id: parsed.id || 'demo-user-bram-001',
+          email: parsed.email || 'bram@example.com',
+          user_metadata: { name: parsed.name || 'Bram' },
+        };
+      } catch {
+        user = {
+          id: 'demo-user-bram-001',
+          email: 'bram@example.com',
+          user_metadata: { name: 'Bram' },
+        };
+      }
+    }
+    return { response: supabaseResponse, user };
+  }
+
+  const supabase = createServerClient(supabaseUrl!, supabaseKey!, {
     cookies: {
       getAll() {
         return request.cookies.getAll();

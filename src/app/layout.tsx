@@ -39,7 +39,10 @@ export default async function RootLayout({
       className={`${isDark ? 'dark' : ''} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 dark:bg-[#090d16] dark:text-slate-100 transition-colors">
+      <body
+        className="min-h-full flex flex-col bg-slate-50 text-slate-900 dark:bg-[#090d16] dark:text-slate-100 transition-colors"
+        suppressHydrationWarning
+      >
         <Navbar initialTheme={isDark ? 'dark' : 'light'} userName={user.name} />
         <div className="flex-1 w-full">
           {children}

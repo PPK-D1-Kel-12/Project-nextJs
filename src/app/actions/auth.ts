@@ -2,12 +2,21 @@
 
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 import { db } from '@/lib/prisma';
 
 export interface AuthActionState {
   error?: string | null;
   success?: string | null;
+}
+
+function isSupabaseConfigured() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  return Boolean(url && key && !url.includes('[PROJECT-REF]') && !url.includes('placeholder'));
 }
 
 export async function registerAction(
@@ -35,6 +44,22 @@ export async function registerAction(
 
   if (password !== confirmPassword) {
     return { error: 'Konfirmasi password tidak cocok.' };
+  }
+
+  // Jika Supabase belum dikonfigurasi, gunakan sesi demo lokal (SRS-01 fallback)
+  if (!isSupabaseConfigured()) {
+    const cookieStore = await cookies();
+    cookieStore.set(
+      'demo_auth_session',
+      JSON.stringify({
+        id: `user-${Date.now()}`,
+        email,
+        name,
+      }),
+      { path: '/', httpOnly: true, sameSite: 'lax' }
+    );
+    revalidatePath('/', 'layout');
+    redirect('/dashboard');
   }
 
   // 2. Daftar ke Supabase Auth
@@ -65,11 +90,16 @@ export async function registerAction(
   try {
     const dbUrl = process.env.DATABASE_URL;
     if (dbUrl && !dbUrl.includes('[YOUR-PASSWORD]')) {
-      await db.orm.public.User.create({
-        id: user.id,
-        email: user.email ?? email,
-        name,
-      });
+      const userOrm = (db as unknown as { orm?: { public?: { User?: { create: (args: { data: Record<string, unknown> }) => Promise<unknown> } } } })?.orm?.public?.User;
+      if (userOrm) {
+        await userOrm.create({
+          data: {
+            id: user.id,
+            email: user.email ?? email,
+            name,
+          },
+        });
+      }
     }
   } catch (dbError) {
     // Log peringatan tanpa menggagalkan registrasi pengguna jika DB belum siap
@@ -114,6 +144,22 @@ export async function loginAction(
     return { error: 'Email dan password wajib diisi.' };
   }
 
+  // Jika Supabase belum dikonfigurasi, gunakan sesi demo lokal (SRS-02 fallback)
+  if (!isSupabaseConfigured()) {
+    const cookieStore = await cookies();
+    cookieStore.set(
+      'demo_auth_session',
+      JSON.stringify({
+        id: 'demo-user-bram-001',
+        email,
+        name: email.split('@')[0],
+      }),
+      { path: '/', httpOnly: true, sameSite: 'lax' }
+    );
+    revalidatePath('/', 'layout');
+    redirect(redirectTo.startsWith('/') ? redirectTo : '/dashboard');
+  }
+
   // 2. Login ke Supabase Auth
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({
@@ -143,8 +189,16 @@ export async function loginAction(
 }
 
 export async function logoutAction(): Promise<void> {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
+  const cookieStore = await cookies();
+  cookieStore.delete('demo_auth_session');
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = await createClient();
+      await supabase.auth.signOut();
+    } catch {
+      // ignore
+    }
+  }
   revalidatePath('/', 'layout');
   redirect('/login');
 }

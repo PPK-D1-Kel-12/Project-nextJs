@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { cookies } from 'next/headers';
 
 export interface CurrentUser {
   id: string;
@@ -7,6 +8,25 @@ export interface CurrentUser {
 }
 
 export async function getCurrentUser(): Promise<CurrentUser> {
+  try {
+    const cookieStore = await cookies();
+    const demoCookie = cookieStore.get('demo_auth_session');
+    if (demoCookie?.value) {
+      try {
+        const parsed = JSON.parse(demoCookie.value);
+        return {
+          id: parsed.id || 'demo-user-bram-001',
+          name: parsed.name || 'Bram',
+          email: parsed.email || 'bram@example.com',
+        };
+      } catch {
+        // ignore parse error
+      }
+    }
+  } catch {
+    // cookies error
+  }
+
   try {
     const supabase = await createClient();
     const {
