@@ -47,19 +47,31 @@ interface PrismaOrmTransaction {
   where: (clause: Record<string, unknown>) => {
     all?: () => Promise<Array<Record<string, unknown>>>;
     findMany?: () => Promise<Array<Record<string, unknown>>>;
-    update: (params: { data: Record<string, unknown> }) => Promise<unknown>;
+    update: (params: Record<string, unknown>) => Promise<unknown>;
     delete: () => Promise<unknown>;
   };
-  create: (params: { data: Record<string, unknown> }) => Promise<unknown>;
+  create: (params: Record<string, unknown>) => Promise<unknown>;
 }
 
-async function getRows(queryObj: any): Promise<Array<Record<string, unknown>>> {
-  if (!queryObj) return [];
-  if (typeof queryObj.all === 'function') {
-    return (await queryObj.all()) || [];
+function safeRevalidatePath(path: string, type?: 'page' | 'layout') {
+  try {
+    revalidatePath(path, type);
+  } catch {
+    // Ignore cache revalidation errors outside of request lifecycle (e.g. during unit tests)
   }
-  if (typeof queryObj.findMany === 'function') {
-    return (await queryObj.findMany()) || [];
+}
+
+async function getRows(queryObj: unknown): Promise<Array<Record<string, unknown>>> {
+  if (!queryObj || typeof queryObj !== 'object') return [];
+  const query = queryObj as {
+    all?: () => Promise<Array<Record<string, unknown>>>;
+    findMany?: () => Promise<Array<Record<string, unknown>>>;
+  };
+  if (typeof query.all === 'function') {
+    return (await query.all()) || [];
+  }
+  if (typeof query.findMany === 'function') {
+    return (await query.findMany()) || [];
   }
   return [];
 }
@@ -264,14 +276,12 @@ export async function createTransaction(input: CreateTransactionInput): Promise<
       const orm = (db as unknown as PrismaDbClient)?.orm?.public?.Transaction;
       if (orm) {
         await orm.create({
-          data: {
-            id: newItem.id,
-            userId: user.id,
-            type: newItem.type,
-            amount: newItem.amount,
-            date: new Date(newItem.date).toISOString(),
-            description: newItem.description,
-          },
+          id: newItem.id,
+          userId: user.id,
+          type: newItem.type,
+          amount: newItem.amount,
+          date: new Date(newItem.date).toISOString(),
+          description: newItem.description,
         });
       }
     }
@@ -283,8 +293,8 @@ export async function createTransaction(input: CreateTransactionInput): Promise<
   const items = getMemoryList(user.id);
   items.unshift(newItem);
 
-  revalidatePath('/dashboard');
-  revalidatePath('/transactions');
+  safeRevalidatePath('/dashboard');
+  safeRevalidatePath('/transactions');
   return { success: true, data: newItem };
 }
 
@@ -326,12 +336,10 @@ export async function updateTransaction(input: UpdateTransactionInput): Promise<
           }
 
           await orm.where({ id: input.id, userId: user.id }).update({
-            data: {
-              type: input.type,
-              amount: Number(input.amount),
-              date: new Date(input.date).toISOString(),
-              description: input.description.trim(),
-            },
+            type: input.type,
+            amount: Number(input.amount),
+            date: new Date(input.date).toISOString(),
+            description: input.description.trim(),
           });
           dbUpdated = true;
         }
@@ -355,8 +363,8 @@ export async function updateTransaction(input: UpdateTransactionInput): Promise<
     };
     userItems[existingIndex] = updated;
 
-    revalidatePath('/dashboard');
-    revalidatePath('/transactions');
+    safeRevalidatePath('/dashboard');
+    safeRevalidatePath('/transactions');
     return { success: true, data: updated };
   }
 
@@ -369,8 +377,8 @@ export async function updateTransaction(input: UpdateTransactionInput): Promise<
       date: input.date,
       description: input.description.trim(),
     };
-    revalidatePath('/dashboard');
-    revalidatePath('/transactions');
+    safeRevalidatePath('/dashboard');
+    safeRevalidatePath('/transactions');
     return { success: true, data: updated };
   }
 
@@ -427,14 +435,14 @@ export async function deleteTransaction(id: string): Promise<{ success: boolean;
 
   if (existingIndex !== -1) {
     userItems.splice(existingIndex, 1);
-    revalidatePath('/dashboard');
-    revalidatePath('/transactions');
+    safeRevalidatePath('/dashboard');
+    safeRevalidatePath('/transactions');
     return { success: true };
   }
 
   if (dbDeleted) {
-    revalidatePath('/dashboard');
-    revalidatePath('/transactions');
+    safeRevalidatePath('/dashboard');
+    safeRevalidatePath('/transactions');
     return { success: true };
   }
 
