@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { loginAction, type AuthActionState } from '@/app/actions/auth';
+import { loginAction, type AuthActionState } from '@/actions/auth';
 
 const initialState: AuthActionState = {
   error: null,
