@@ -7,7 +7,7 @@ vi.mock('@/lib/supabase/server', () => ({ createClient: async () => ({ auth: { g
 vi.mock('next/cache', () => ({ revalidatePath: mocks.revalidate }));
 
 import { getBudgetData, saveBudget } from '@/actions/budgets';
-import { summarizeBudget, validAmount, validMonth } from '@/lib/budgets';
+import { compareMonthlyBudgetWithAllocations, summarizeBudget, validAmount, validMonth, type BudgetData } from '@/lib/budgets';
 
 function form(values: Record<string, string>) {
   const result = new FormData();
@@ -88,3 +88,78 @@ describe('Budget actions', () => {
     expect(chain.eq).toHaveBeenCalledWith('user_id', 'owner-a');
   });
 });
+
+describe('compareMonthlyBudgetWithAllocations (SRS-11 & SRS-12)', () => {
+  it('harus menghitung sisa pagu yang belum dialokasikan dan status alokasi', () => {
+    const mockData: BudgetData = {
+      accounts: [{ id: 'acc-1', name: 'BCA' }],
+      categories: [{ id: 'cat-1', name: 'Makanan' }, { id: 'cat-2', name: 'Transport' }],
+      allocations: [
+        { id: 'al-1', account_id: 'acc-1', category_id: 'cat-1', month: '2026-09-01', amount: 2000000 },
+        { id: 'al-2', account_id: 'acc-1', category_id: 'cat-2', month: '2026-09-01', amount: 1000000 },
+      ],
+    };
+
+    const result = compareMonthlyBudgetWithAllocations(5000000, mockData);
+    expect(result.targetBudget).toBe(5000000);
+    expect(result.totalAllocated).toBe(3000000);
+    expect(result.unallocatedAmount).toBe(2000000);
+    expect(result.allocationPercentage).toBe(60);
+    expect(result.status).toBe('UNDER_ALLOCATED');
+  });
+
+  it('harus menandai BALANCED jika total alokasi sama dengan pagu target', () => {
+    const mockData: BudgetData = {
+      accounts: [{ id: 'acc-1', name: 'BCA' }],
+      categories: [{ id: 'cat-1', name: 'Makanan' }],
+      allocations: [
+        { id: 'al-1', account_id: 'acc-1', category_id: 'cat-1', month: '2026-09-01', amount: 5000000 },
+      ],
+    };
+
+    const result = compareMonthlyBudgetWithAllocations(5000000, mockData);
+    expect(result.targetBudget).toBe(5000000);
+    expect(result.totalAllocated).toBe(5000000);
+    expect(result.unallocatedAmount).toBe(0);
+    expect(result.allocationPercentage).toBe(100);
+    expect(result.status).toBe('BALANCED');
+  });
+
+  it('harus menandai OVER_ALLOCATED jika total alokasi melebihi pagu target', () => {
+    const mockData: BudgetData = {
+      accounts: [{ id: 'acc-1', name: 'BCA' }],
+      categories: [{ id: 'cat-1', name: 'Sewa' }],
+      allocations: [
+        { id: 'al-1', account_id: 'acc-1', category_id: 'cat-1', month: '2026-09-01', amount: 6000000 },
+      ],
+    };
+
+    const result = compareMonthlyBudgetWithAllocations(5000000, mockData);
+    expect(result.totalAllocated).toBe(6000000);
+    expect(result.unallocatedAmount).toBe(-1000000);
+    expect(result.allocationPercentage).toBe(120);
+    expect(result.status).toBe('OVER_ALLOCATED');
+  });
+
+  it('harus menangani status NO_TARGET jika targetBudget <= 0', () => {
+    const mockData: BudgetData = {
+      accounts: [{ id: 'acc-1', name: 'BCA' }],
+      categories: [{ id: 'cat-1', name: 'Makanan' }],
+      allocations: [
+        { id: 'al-1', account_id: 'acc-1', category_id: 'cat-1', month: '2026-09-01', amount: 1500000 },
+      ],
+    };
+
+    const result = compareMonthlyBudgetWithAllocations(0, mockData);
+    expect(result.targetBudget).toBe(0);
+    expect(result.totalAllocated).toBe(1500000);
+    expect(result.unallocatedAmount).toBe(-1500000);
+    expect(result.allocationPercentage).toBe(100);
+    expect(result.status).toBe('NO_TARGET');
+
+    const emptyResult = compareMonthlyBudgetWithAllocations(0, { accounts: [], categories: [], allocations: [] });
+    expect(emptyResult.allocationPercentage).toBe(0);
+    expect(emptyResult.status).toBe('NO_TARGET');
+  });
+});
+

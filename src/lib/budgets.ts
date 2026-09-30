@@ -32,3 +32,47 @@ export function summarizeBudget(data: BudgetData) {
     })),
   };
 }
+
+export interface BudgetComparison {
+  targetBudget: number;
+  totalAllocated: number;
+  unallocatedAmount: number;
+  allocationPercentage: number;
+  status: 'UNDER_ALLOCATED' | 'BALANCED' | 'OVER_ALLOCATED' | 'NO_TARGET';
+}
+
+export function compareMonthlyBudgetWithAllocations(
+  targetBudget: number,
+  data: BudgetData
+): BudgetComparison {
+  const totalAllocated = (data?.allocations ?? []).reduce((sum, item) => sum + item.amount, 0);
+
+  if (targetBudget <= 0) {
+    return {
+      targetBudget: 0,
+      totalAllocated,
+      unallocatedAmount: -totalAllocated,
+      allocationPercentage: totalAllocated > 0 ? 100 : 0,
+      status: 'NO_TARGET',
+    };
+  }
+
+  const unallocatedAmount = targetBudget - totalAllocated;
+  const allocationPercentage = Math.round((totalAllocated / targetBudget) * 100);
+
+  let status: BudgetComparison['status'] = 'UNDER_ALLOCATED';
+  if (totalAllocated === targetBudget) {
+    status = 'BALANCED';
+  } else if (totalAllocated > targetBudget) {
+    status = 'OVER_ALLOCATED';
+  }
+
+  return {
+    targetBudget,
+    totalAllocated,
+    unallocatedAmount,
+    allocationPercentage,
+    status,
+  };
+}
+
