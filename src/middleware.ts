@@ -16,7 +16,8 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = pathname === '/login' || pathname === '/register';
   const isProtectedRoute =
     pathname.startsWith('/dashboard') ||
-    pathname.startsWith('/transactions');
+    pathname.startsWith('/transactions') ||
+    pathname.startsWith('/budgets');
 
   // Root path: redirect ke /dashboard jika sudah login, atau /login jika belum
   if (pathname === '/') {
