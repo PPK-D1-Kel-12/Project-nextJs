@@ -4,14 +4,17 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { DashboardSummary } from '@/actions/transactions';
+import type { BudgetAnalyticsSummary } from '@/actions/budget-analytics';
+import { BudgetSummaryWidget } from '@/components/budget-summary-widget';
 import { TransactionModal } from '@/components/transaction-modal';
 import { formatRupiah, formatDate } from '@/lib/format';
 
 interface DashboardClientProps {
   summary: DashboardSummary;
+  budgetSummary?: BudgetAnalyticsSummary;
 }
 
-export function DashboardClient({ summary }: DashboardClientProps) {
+export function DashboardClient({ summary, budgetSummary }: DashboardClientProps) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isDeficit = summary.balance < 0;
@@ -155,6 +158,9 @@ export function DashboardClient({ summary }: DashboardClientProps) {
           </div>
         </div>
       </div>
+
+      {/* Budget Summary & Visual Indicator Widget (SRS-13 & SRS-14) */}
+      {budgetSummary && <BudgetSummaryWidget summary={budgetSummary} />}
 
       {/* Recent Transactions Section (SRS-05) */}
       <div className="rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden">

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { getDashboardSummary } from '@/actions/transactions';
+import { getMonthlyBudgetSummary } from '@/actions/budget-analytics';
 import { DashboardClient } from './dashboard-client';
 
 export const metadata = {
@@ -24,7 +25,10 @@ export default async function DashboardPage() {
     }
   }
 
-  const summary = await getDashboardSummary();
+  const [summary, budgetSummary] = await Promise.all([
+    getDashboardSummary(),
+    getMonthlyBudgetSummary(),
+  ]);
 
-  return <DashboardClient summary={summary} />;
+  return <DashboardClient summary={summary} budgetSummary={budgetSummary} />;
 }
