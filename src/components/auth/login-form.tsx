@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { loginAction, type AuthActionState } from '@/actions/auth';
+import { loginAction, demoLoginAction, type AuthActionState } from '@/actions/auth';
 
 const initialState: AuthActionState = {
   error: null,
@@ -124,6 +124,26 @@ export function LoginForm() {
           ) : (
             'Masuk'
           )}
+        </button>
+
+        <div className="relative flex items-center justify-center my-4">
+          <div className="border-t border-zinc-200 dark:border-zinc-800 w-full" />
+          <span className="bg-white dark:bg-zinc-900 px-3 text-xs text-zinc-400 uppercase tracking-wider font-medium">
+            atau
+          </span>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => demoLoginAction(redirectTo)}
+          className="w-full py-2.5 px-4 rounded-xl text-zinc-700 dark:text-zinc-300 font-medium bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700 transition-all flex items-center justify-center gap-2 text-sm cursor-pointer shadow-2xs"
+        >
+          <svg className="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+            <polyline points="10 17 15 12 10 7" />
+            <line x1="15" y1="12" x2="3" y2="12" />
+          </svg>
+          <span>Masuk Cepat Mode Demo (Pengujian)</span>
         </button>
       </form>
 

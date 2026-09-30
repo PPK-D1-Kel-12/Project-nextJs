@@ -29,10 +29,14 @@ export async function getCurrentUser(): Promise<CurrentUser> {
 
   try {
     const supabase = await createClient();
+    const userPromise = supabase.auth.getUser();
+    const timeoutPromise = new Promise<{ data: { user: null }; error: null }>((resolve) =>
+      setTimeout(() => resolve({ data: { user: null }, error: null }), 1500)
+    );
     const {
       data: { user },
       error,
-    } = await supabase.auth.getUser();
+    } = await Promise.race([userPromise, timeoutPromise]);
 
     if (user && !error) {
       return {
