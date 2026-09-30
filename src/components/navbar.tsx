@@ -65,6 +65,16 @@ export function Navbar({ initialTheme = 'light', userName = 'Bram' }: NavbarProp
         </svg>
       ),
     },
+    {
+      name: 'Anggaran',
+      href: '/budgets',
+      icon: (
+        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a8 8 0 0 1-8 5H5a2 2 0 0 1-2-2V7" />
+          <path d="M16 11h.01" />
+        </svg>
+      ),
+    },
   ];
 
   return (
