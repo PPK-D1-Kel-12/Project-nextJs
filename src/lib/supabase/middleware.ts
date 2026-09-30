@@ -18,26 +18,29 @@ export async function updateSession(request: NextRequest) {
     !supabaseUrl.includes('placeholder')
   );
 
-  if (!isConfigured) {
-    const demoCookie = request.cookies.get('demo_auth_session');
+  // Cek apakah terdapat sesi demo lokal aktif (untuk pengujian instan / offline)
+  const demoCookie = request.cookies.get('demo_auth_session');
+  if (demoCookie?.value) {
     let user = null;
-    if (demoCookie?.value) {
-      try {
-        const parsed = JSON.parse(demoCookie.value);
-        user = {
-          id: parsed.id || 'demo-user-bram-001',
-          email: parsed.email || 'bram@example.com',
-          user_metadata: { name: parsed.name || 'Bram' },
-        };
-      } catch {
-        user = {
-          id: 'demo-user-bram-001',
-          email: 'bram@example.com',
-          user_metadata: { name: 'Bram' },
-        };
-      }
+    try {
+      const parsed = JSON.parse(demoCookie.value);
+      user = {
+        id: parsed.id || 'demo-user-bram-001',
+        email: parsed.email || 'bram@example.com',
+        user_metadata: { name: parsed.name || 'Bram' },
+      };
+    } catch {
+      user = {
+        id: 'demo-user-bram-001',
+        email: 'bram@example.com',
+        user_metadata: { name: 'Bram' },
+      };
     }
     return { response: supabaseResponse, user };
+  }
+
+  if (!isConfigured) {
+    return { response: supabaseResponse, user: null };
   }
 
   const supabase = createServerClient(supabaseUrl!, supabaseKey!, {
@@ -57,12 +60,17 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  // IMPORTANT: Do not run code between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Menggunakan timeout 1.5s agar tidak menggantung jika ada kendala jaringan ke Supabase
+  let user = null;
+  try {
+    const userPromise = supabase.auth.getUser().then((res) => res.data?.user || null);
+    const timeoutPromise = new Promise<null>((resolve) =>
+      setTimeout(() => resolve(null), 1500)
+    );
+    user = await Promise.race([userPromise, timeoutPromise]);
+  } catch {
+    user = null;
+  }
 
   return { response: supabaseResponse, user };
 }

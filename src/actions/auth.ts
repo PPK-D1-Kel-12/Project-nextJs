@@ -188,6 +188,21 @@ export async function loginAction(
   redirect(redirectTo.startsWith('/') ? redirectTo : '/dashboard');
 }
 
+export async function demoLoginAction(redirectTo = '/dashboard'): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.set(
+    'demo_auth_session',
+    JSON.stringify({
+      id: 'demo-user-bram-001',
+      email: 'bram@example.com',
+      name: 'Bram',
+    }),
+    { path: '/', httpOnly: true, sameSite: 'lax' }
+  );
+  revalidatePath('/', 'layout');
+  redirect(redirectTo.startsWith('/') ? redirectTo : '/dashboard');
+}
+
 export async function logoutAction(): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.delete('demo_auth_session');
