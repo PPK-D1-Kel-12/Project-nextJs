@@ -9,8 +9,8 @@ import {
 } from '@/actions/budget';
 
 describe('Budget Core Actions & Data Isolation (SRS-11 & SRS-15)', () => {
-  beforeEach(() => {
-    _resetMemoryBudgets();
+  beforeEach(async () => {
+    await _resetMemoryBudgets();
     _setTestUserContext({
       id: 'user-angga-001',
       name: 'Angga',

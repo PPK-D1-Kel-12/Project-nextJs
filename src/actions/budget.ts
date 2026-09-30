@@ -61,6 +61,17 @@ export async function _setTestUserContext(user: CurrentUser | null) {
 
 export async function _resetMemoryBudgets() {
   memoryBudgets.clear();
+  if (process.env.DATABASE_URL) {
+    try {
+      const orm = (db as unknown as PrismaDbClient)?.orm?.public?.Budget;
+      if (orm) {
+        await orm.where({ userId: 'user-angga-001' }).delete?.();
+        await orm.where({ userId: 'user-bella-002' }).delete?.();
+      }
+    } catch {
+      // ignore cleanup errors during test
+    }
+  }
 }
 
 async function resolveUser(): Promise<CurrentUser> {
