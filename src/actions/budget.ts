@@ -55,11 +55,11 @@ if (!globalForBudgetMemory._memoryBudgets) {
 const memoryBudgets = globalForBudgetMemory._memoryBudgets;
 
 // Testing helper to simulate different users for SRS-15 isolation tests
-export function _setTestUserContext(user: CurrentUser | null) {
+export async function _setTestUserContext(user: CurrentUser | null) {
   globalForBudgetMemory._testUserContext = user;
 }
 
-export function _resetMemoryBudgets() {
+export async function _resetMemoryBudgets() {
   memoryBudgets.clear();
 }
 
