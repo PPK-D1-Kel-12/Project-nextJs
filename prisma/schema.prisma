@@ -19,5 +19,14 @@ model Transaction {
   updatedAt   temporal.updatedAtString()
 }
 
+model Budget {
+  id           String            @id @default(uuid())
+  userId       String
+  month        Int
+  year         Int
+  targetAmount Float
+  createdAt    TimestamptzString @default(now())
+  updatedAt    temporal.updatedAtString()
 
-
+  @@unique([userId, month, year])
+}
