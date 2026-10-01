@@ -15,13 +15,28 @@ export function RegisterForm() {
   return (
     <div
       suppressHydrationWarning
-      className="w-full max-w-md p-8 bg-white dark:bg-zinc-900 rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800"
+      className="w-full max-w-md p-8 sm:p-10 clay-card"
     >
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        <div className="flex justify-center mb-4">
+          <div className="clay-water-pod w-14 h-14 rounded-2xl flex items-center justify-center text-sky-600 dark:text-sky-300">
+            <svg
+              className="w-7 h-7"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+          </div>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900 dark:text-[#edf4fc]">
           Buat Akun Baru
         </h1>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="mt-2 text-sm text-stone-600 dark:text-[#91a5c2]">
           Mulai kelola pengeluaran dan pemasukan Anda dengan Expense Tracker
         </p>
       </div>
@@ -29,10 +44,10 @@ export function RegisterForm() {
       {state?.error && (
         <div
           role="alert"
-          className="mb-6 p-4 text-sm text-red-700 bg-red-50 dark:bg-red-950/50 dark:text-red-300 rounded-xl border border-red-200 dark:border-red-900/50 flex items-start gap-3"
+          className="mb-6 p-4 text-sm font-medium text-rose-700 dark:text-rose-300 bg-rose-50/80 dark:bg-rose-950/40 rounded-2xl border border-rose-200/60 dark:border-rose-800/40 flex items-start gap-3 shadow-inner"
         >
           <svg
-            className="w-5 h-5 text-red-500 shrink-0 mt-0.5"
+            className="w-5 h-5 text-rose-500 shrink-0 mt-0.5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -51,7 +66,7 @@ export function RegisterForm() {
       {state?.success && (
         <div
           role="status"
-          className="mb-6 p-4 text-sm text-emerald-700 bg-emerald-50 dark:bg-emerald-950/50 dark:text-emerald-300 rounded-xl border border-emerald-200 dark:border-emerald-900/50 flex items-start gap-3"
+          className="mb-6 p-4 text-sm font-medium text-emerald-700 dark:text-emerald-300 bg-emerald-50/80 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200/60 dark:border-emerald-800/40 flex items-start gap-3 shadow-inner"
         >
           <svg
             className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"
@@ -70,11 +85,11 @@ export function RegisterForm() {
         </div>
       )}
 
-      <form action={formAction} className="space-y-5">
-        <div>
+      <form action={formAction} className="space-y-4">
+        <div className="space-y-1.5">
           <label
             htmlFor="name"
-            className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+            className="block text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-[#c5d5ea]"
           >
             Nama Lengkap
           </label>
@@ -86,14 +101,14 @@ export function RegisterForm() {
             autoComplete="name"
             placeholder="misal: Budi Santoso"
             disabled={isPending}
-            className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+            className="clay-input w-full px-4 py-3 placeholder:text-stone-400 dark:placeholder:text-[#6782a8] disabled:opacity-50 text-sm font-medium"
           />
         </div>
 
-        <div>
+        <div className="space-y-1.5">
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+            className="block text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-[#c5d5ea]"
           >
             Alamat Email
           </label>
@@ -105,14 +120,14 @@ export function RegisterForm() {
             autoComplete="email"
             placeholder="nama@email.com"
             disabled={isPending}
-            className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+            className="clay-input w-full px-4 py-3 placeholder:text-stone-400 dark:placeholder:text-[#6782a8] disabled:opacity-50 text-sm font-medium"
           />
         </div>
 
-        <div>
+        <div className="space-y-1.5">
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+            className="block text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-[#c5d5ea]"
           >
             Password
           </label>
@@ -125,14 +140,14 @@ export function RegisterForm() {
             autoComplete="new-password"
             placeholder="Minimal 6 karakter"
             disabled={isPending}
-            className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+            className="clay-input w-full px-4 py-3 placeholder:text-stone-400 dark:placeholder:text-[#6782a8] disabled:opacity-50 text-sm font-medium"
           />
         </div>
 
-        <div>
+        <div className="space-y-1.5">
           <label
             htmlFor="confirmPassword"
-            className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+            className="block text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-[#c5d5ea]"
           >
             Konfirmasi Password
           </label>
@@ -145,50 +160,52 @@ export function RegisterForm() {
             autoComplete="new-password"
             placeholder="Ulangi password"
             disabled={isPending}
-            className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+            className="clay-input w-full px-4 py-3 placeholder:text-stone-400 dark:placeholder:text-[#6782a8] disabled:opacity-50 text-sm font-medium"
           />
         </div>
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="w-full py-3 px-4 rounded-xl text-white font-medium bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-md shadow-blue-500/20"
-        >
-          {isPending ? (
-            <>
-              <svg
-                className="animate-spin h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v8H4z"
-                />
-              </svg>
-              <span>Mendaftar...</span>
-            </>
-          ) : (
-            'Daftar Sekarang'
-          )}
-        </button>
+        <div className="pt-2">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="clay-btn-primary w-full py-3.5 px-4 rounded-2xl text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {isPending ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  />
+                </svg>
+                <span>Mendaftar...</span>
+              </>
+            ) : (
+              'Daftar Sekarang'
+            )}
+          </button>
+        </div>
       </form>
 
-      <div className="mt-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
+      <div className="mt-8 text-center text-sm font-medium text-stone-600 dark:text-[#91a5c2]">
         Sudah memiliki akun?{' '}
         <Link
           href="/login"
-          className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
+          className="font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 underline underline-offset-4 transition-colors"
         >
           Masuk di sini
         </Link>

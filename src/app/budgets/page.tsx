@@ -43,15 +43,15 @@ export default async function BudgetsPage({
         budgetData={data ?? null}
       />
 
-      <section className="border-t border-slate-200 dark:border-slate-800 pt-8 space-y-6">
+      <section className="border-t border-slate-200/80 dark:border-slate-800/80 pt-8 space-y-6">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+          <p className="text-xs font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             Rencana Keuangan & Pos Belanja (SRS-12)
           </p>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mt-1">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
             Alokasi Rekening & Kategori
           </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
             Alokasikan dana dari setiap rekening sumber ke kategori pengeluaran bulanan untuk periode {month}.
           </p>
         </div>
@@ -61,12 +61,12 @@ export default async function BudgetsPage({
         ) : (
           <div
             role="alert"
-            className="rounded-2xl border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-900/60 text-amber-900 dark:text-amber-300 p-6"
+            className="clay-card p-6 bg-amber-500/10 border-amber-500/20 text-amber-900 dark:text-amber-200 space-y-2"
           >
-            <h2 className="font-semibold">Anggaran belum bisa dimuat</h2>
-            <p className="mt-2 text-sm">{error}</p>
+            <h3 className="font-extrabold text-base">Anggaran belum bisa dimuat</h3>
+            <p className="text-xs font-medium">{error}</p>
             <a
-              className="inline-block mt-4 text-sm font-semibold underline"
+              className="clay-btn-secondary inline-block px-4 py-2 text-xs font-bold mt-2"
               href={`/budgets?month=${month}`}
             >
               Coba lagi

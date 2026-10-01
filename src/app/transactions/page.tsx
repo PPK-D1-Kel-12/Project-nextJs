@@ -155,18 +155,15 @@ export default function TransactionsPage() {
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Riwayat Transaksi
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Kelola, saring, ubah, dan pantau seluruh catatan arus kas keuangan Anda.
-          </p>
         </div>
 
         {/* Tombol Tambah Transaksi */}
         <button
           type="button"
           onClick={handleOpenAdd}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-slate-950 text-sm font-semibold transition-all cursor-pointer shadow-xs hover:shadow-md"
+          className="clay-btn-primary inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold cursor-pointer"
         >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <line x1="12" y1="5" x2="12" y2="19" />
             <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
@@ -175,24 +172,26 @@ export default function TransactionsPage() {
       </div>
 
       {/* Filter Panel (SRS-08) */}
-      <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-xs">
+      <div className="clay-card p-6 space-y-4">
         <form onSubmit={handleApplyFilter} className="space-y-4">
-          <div className="flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800/80">
-            <svg className="w-4 h-4 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-            </svg>
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+          <div className="flex items-center gap-2 pb-3 border-b border-slate-200/60 dark:border-slate-800/80">
+            <div className="clay-water-pod w-8 h-8 rounded-xl flex items-center justify-center text-sky-600 dark:text-sky-300">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+              </svg>
+            </div>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
               Filter Pencarian Transaksi
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
-            {/* Filter Jenis: Segmented Pills */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-1">
+            {/* Filter Jenis: Segmented Clay Pod */}
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
                 Jenis Transaksi
               </label>
-              <div className="flex rounded-xl bg-slate-100 dark:bg-slate-800/80 p-1">
+              <div className="clay-pod flex p-1 rounded-2xl gap-1">
                 {(
                   [
                     { key: 'ALL', label: 'Semua' },
@@ -204,9 +203,9 @@ export default function TransactionsPage() {
                     key={option.key}
                     type="button"
                     onClick={() => setTypeFilter(option.key)}
-                    className={`flex-1 py-1.5 px-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+                    className={`flex-1 py-2 px-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                       typeFilter === option.key
-                        ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs'
+                        ? 'clay-btn-primary'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
@@ -218,7 +217,7 @@ export default function TransactionsPage() {
 
             {/* Filter Dari Tanggal */}
             <div>
-              <label htmlFor="startDate" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+              <label htmlFor="startDate" className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
                 Dari Tanggal
               </label>
               <input
@@ -226,13 +225,13 @@ export default function TransactionsPage() {
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-400 focus:outline-hidden transition-all"
+                className="clay-input w-full px-3.5 py-2 text-xs font-semibold"
               />
             </div>
 
             {/* Filter Sampai Tanggal */}
             <div>
-              <label htmlFor="endDate" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+              <label htmlFor="endDate" className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
                 Sampai Tanggal
               </label>
               <input
@@ -240,19 +239,19 @@ export default function TransactionsPage() {
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white text-xs font-medium focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-400 focus:outline-hidden transition-all"
+                className="clay-input w-full px-3.5 py-2 text-xs font-semibold"
               />
             </div>
           </div>
 
           {/* Action Buttons: Terapkan & Reset */}
-          <div className="flex items-center justify-end gap-2.5 pt-2">
+          <div className="flex items-center justify-end gap-3 pt-2">
             <button
               type="button"
               onClick={handleResetFilter}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold transition-all cursor-pointer"
+              className="clay-btn-secondary inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold cursor-pointer"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                 <path d="M3 3v5h5" />
               </svg>
@@ -260,9 +259,9 @@ export default function TransactionsPage() {
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-slate-950 text-xs font-semibold transition-all cursor-pointer shadow-2xs"
+              className="clay-btn-primary inline-flex items-center gap-1.5 px-5 py-2 text-xs font-bold cursor-pointer"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
               <span>Terapkan Filter</span>
@@ -272,7 +271,7 @@ export default function TransactionsPage() {
       </div>
 
       {/* Tabel Transaksi (SRS-08, SRS-09, SRS-10) */}
-      <div className="rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden">
+      <div className="clay-card overflow-hidden">
         {fetchError && (
           <div className="p-4 bg-rose-50 dark:bg-rose-950/40 border-b border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center justify-between">
             <span>{fetchError}</span>
@@ -297,7 +296,7 @@ export default function TransactionsPage() {
         ) : transactions.length === 0 ? (
           /* Empty State */
           <div className="py-16 px-6 text-center">
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mb-3">
+            <div className="clay-water-pod w-14 h-14 mx-auto rounded-2xl text-sky-600 dark:text-sky-300 flex items-center justify-center mb-3">
               <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <path d="m10 15 4-4-4-4" />
@@ -313,14 +312,14 @@ export default function TransactionsPage() {
               <button
                 type="button"
                 onClick={handleResetFilter}
-                className="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
+                className="clay-btn-secondary px-4 py-2 text-xs font-bold cursor-pointer"
               >
                 Reset Filter
               </button>
               <button
                 type="button"
                 onClick={handleOpenAdd}
-                className="px-3.5 py-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 cursor-pointer"
+                className="clay-btn-primary px-4 py-2 text-xs font-bold cursor-pointer"
               >
                 Tambah Transaksi Baru
               </button>
@@ -360,19 +359,19 @@ export default function TransactionsPage() {
                         {/* Jenis Badge */}
                         <td className="py-4 px-6 whitespace-nowrap">
                           <span
-                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
+                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold clay-badge uppercase tracking-wider ${
                               isIncome
-                                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-                                : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
+                                ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+                                : 'bg-rose-500/10 text-rose-700 dark:text-rose-300'
                             }`}
                           >
                             {isIncome ? (
-                              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="m7 7 10 10" />
                                 <path d="M17 7v10H7" />
                               </svg>
                             ) : (
-                              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M7 17 17 7" />
                                 <path d="M7 7h10v10" />
                               </svg>
@@ -382,7 +381,7 @@ export default function TransactionsPage() {
                         </td>
 
                         {/* Nominal */}
-                        <td className="py-4 px-6 whitespace-nowrap text-right font-mono font-bold">
+                        <td className="py-4 px-6 whitespace-nowrap text-right font-mono font-extrabold text-sm sm:text-base">
                           <span
                             className={
                               isIncome
@@ -396,15 +395,15 @@ export default function TransactionsPage() {
 
                         {/* Aksi (SRS-09, SRS-10) */}
                         <td className="py-4 px-6 whitespace-nowrap text-center">
-                          <div className="inline-flex items-center gap-1.5">
+                          <div className="inline-flex items-center gap-2">
                             {/* Tombol Ubah (SRS-09) */}
                             <button
                               type="button"
                               onClick={() => handleOpenEdit(tx)}
                               title="Ubah Transaksi"
-                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-medium transition-colors cursor-pointer"
+                              className="clay-btn-secondary inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold cursor-pointer"
                             >
-                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
                                 <path d="m15 5 4 4" />
                               </svg>
@@ -419,9 +418,9 @@ export default function TransactionsPage() {
                                 setTransactionToDelete(tx);
                               }}
                               title="Hapus Transaksi"
-                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-rose-200 dark:border-rose-900/60 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-medium transition-colors cursor-pointer"
+                              className="clay-btn-rose inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white cursor-pointer"
                             >
-                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M3 6h18" />
                                 <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
                                 <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
@@ -439,35 +438,35 @@ export default function TransactionsPage() {
 
             {/* Pagination Controls (SRS-08) */}
             {transactions.length > 0 && (
-              <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-                <div className="text-slate-500 dark:text-slate-400">
-                  Menampilkan <span className="font-semibold text-slate-900 dark:text-white">{startIndex + 1}</span> sampai{' '}
-                  <span className="font-semibold text-slate-900 dark:text-white">{endIndex}</span> dari{' '}
-                  <span className="font-semibold text-slate-900 dark:text-white">{transactions.length}</span> transaksi
+              <div className="p-4 sm:p-5 border-t border-slate-200/60 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+                <div className="text-slate-500 dark:text-slate-400 font-medium">
+                  Menampilkan <span className="font-bold text-slate-900 dark:text-white">{startIndex + 1}</span> sampai{' '}
+                  <span className="font-bold text-slate-900 dark:text-white">{endIndex}</span> dari{' '}
+                  <span className="font-bold text-slate-900 dark:text-white">{transactions.length}</span> transaksi
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   <button
                     type="button"
                     onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-colors cursor-pointer"
+                    className="clay-btn-secondary inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   >
-                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="15 18 9 12 15 6" />
                     </svg>
                     <span>Sebelumnya</span>
                   </button>
-                  <span className="px-2 text-slate-600 dark:text-slate-400 font-medium">
+                  <span className="px-2 text-slate-700 dark:text-slate-300 font-bold">
                     Halaman {currentPage} dari {totalPages}
                   </span>
                   <button
                     type="button"
                     onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-colors cursor-pointer"
+                    className="clay-btn-secondary inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   >
                     <span>Selanjutnya</span>
-                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="9 18 15 12 9 6" />
                     </svg>
                   </button>
@@ -498,13 +497,13 @@ export default function TransactionsPage() {
           }}
         >
           <div
-            className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/80 dark:border-slate-800 p-6 space-y-4 animate-in fade-in zoom-in-95 duration-150"
+            className="clay-card w-full max-w-md p-6 sm:p-7 space-y-4 animate-in fade-in zoom-in-95 duration-150"
             role="alertdialog"
             aria-modal="true"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <div className="flex items-center gap-3.5">
+              <div className="clay-water-pod w-12 h-12 rounded-2xl text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 6h18" />
                   <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
                   <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
@@ -513,28 +512,28 @@ export default function TransactionsPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
                   Konfirmasi Hapus Transaksi
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                   SRS-10: Penghapusan transaksi permanen
                 </p>
               </div>
             </div>
 
             {deleteError && (
-              <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs">
+              <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-300 text-xs font-bold">
                 {deleteError}
               </div>
             )}
 
-            <p className="text-sm text-slate-600 dark:text-slate-300">
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
               Apakah Anda yakin ingin menghapus transaksi{' '}
-              <span className="font-semibold text-slate-900 dark:text-white">
+              <span className="font-bold text-slate-900 dark:text-white">
                 &ldquo;{transactionToDelete.description}&rdquo;
               </span>{' '}
               senilai{' '}
-              <span className="font-semibold font-mono text-slate-900 dark:text-white">
+              <span className="font-extrabold font-mono text-slate-900 dark:text-white">
                 {formatRupiah(transactionToDelete.amount)}
               </span>
               ? Tindakan ini tidak dapat dibatalkan.
@@ -545,7 +544,7 @@ export default function TransactionsPage() {
                 type="button"
                 onClick={() => setTransactionToDelete(null)}
                 disabled={isDeleting}
-                className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold cursor-pointer disabled:opacity-50"
+                className="clay-btn-secondary px-4 py-2.5 text-xs font-bold cursor-pointer disabled:opacity-50"
               >
                 Batal
               </button>
@@ -553,7 +552,7 @@ export default function TransactionsPage() {
                 type="button"
                 onClick={handleConfirmDelete}
                 disabled={isDeleting}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold cursor-pointer transition-colors disabled:opacity-50 shadow-xs"
+                className="clay-btn-rose inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-white cursor-pointer disabled:opacity-50"
               >
                 {isDeleting ? (
                   <>

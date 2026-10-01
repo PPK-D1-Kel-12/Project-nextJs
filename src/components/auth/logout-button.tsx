@@ -23,7 +23,7 @@ export function LogoutButton({ className }: LogoutButtonProps) {
       disabled={isPending}
       className={
         className ||
-        'px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-xl transition-all disabled:opacity-50 flex items-center gap-2 cursor-pointer'
+        'clay-btn-secondary px-4 py-2 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 rounded-xl transition-all disabled:opacity-50 flex items-center gap-2 cursor-pointer'
       }
     >
       {isPending ? (

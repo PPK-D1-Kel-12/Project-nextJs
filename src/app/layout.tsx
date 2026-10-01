@@ -40,7 +40,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className="min-h-full flex flex-col bg-slate-50 text-slate-900 dark:bg-[#090d16] dark:text-slate-100 transition-colors"
+        className="min-h-full flex flex-col bg-[#f7f4ea] text-[#1c1917] dark:bg-[#0c1524] dark:text-[#edf4fc] transition-colors"
         suppressHydrationWarning
       >
         <Navbar initialTheme={isDark ? 'dark' : 'light'} userName={user.name} />

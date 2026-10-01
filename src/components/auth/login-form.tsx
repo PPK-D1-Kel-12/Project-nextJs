@@ -18,13 +18,28 @@ export function LoginForm() {
   return (
     <div
       suppressHydrationWarning
-      className="w-full max-w-md p-8 bg-white dark:bg-zinc-900 rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800"
+      className="w-full max-w-md p-8 sm:p-10 clay-card"
     >
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        <div className="flex justify-center mb-4">
+          <div className="clay-water-pod w-14 h-14 rounded-2xl flex items-center justify-center text-sky-600 dark:text-sky-300">
+            <svg
+              className="w-7 h-7"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+          </div>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900 dark:text-[#edf4fc]">
           Selamat Datang Kembali
         </h1>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="mt-2 text-sm text-stone-600 dark:text-[#91a5c2]">
           Masuk ke akun Anda untuk melihat ringkasan keuangan dan transaksi
         </p>
       </div>
@@ -32,10 +47,10 @@ export function LoginForm() {
       {state?.error && (
         <div
           role="alert"
-          className="mb-6 p-4 text-sm text-red-700 bg-red-50 dark:bg-red-950/50 dark:text-red-300 rounded-xl border border-red-200 dark:border-red-900/50 flex items-start gap-3"
+          className="mb-6 p-4 text-sm font-medium text-rose-700 dark:text-rose-300 bg-rose-50/80 dark:bg-rose-950/40 rounded-2xl border border-rose-200/60 dark:border-rose-800/40 flex items-start gap-3 shadow-inner"
         >
           <svg
-            className="w-5 h-5 text-red-500 shrink-0 mt-0.5"
+            className="w-5 h-5 text-rose-500 shrink-0 mt-0.5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -54,10 +69,10 @@ export function LoginForm() {
       <form action={formAction} className="space-y-5">
         <input type="hidden" name="redirectTo" value={redirectTo} />
 
-        <div>
+        <div className="space-y-1.5">
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+            className="block text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-[#c5d5ea]"
           >
             Alamat Email
           </label>
@@ -69,14 +84,14 @@ export function LoginForm() {
             autoComplete="email"
             placeholder="nama@email.com"
             disabled={isPending}
-            className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+            className="clay-input w-full px-4 py-3 placeholder:text-stone-400 dark:placeholder:text-[#6782a8] disabled:opacity-50 text-sm font-medium"
           />
         </div>
 
-        <div>
+        <div className="space-y-1.5">
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+            className="block text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-[#c5d5ea]"
           >
             Password
           </label>
@@ -88,14 +103,14 @@ export function LoginForm() {
             autoComplete="current-password"
             placeholder="••••••••"
             disabled={isPending}
-            className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+            className="clay-input w-full px-4 py-3 placeholder:text-stone-400 dark:placeholder:text-[#6782a8] disabled:opacity-50 text-sm font-medium"
           />
         </div>
 
         <button
           type="submit"
           disabled={isPending}
-          className="w-full py-3 px-4 rounded-xl text-white font-medium bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-md shadow-blue-500/20"
+          className="clay-btn-primary w-full py-3.5 px-4 rounded-2xl text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isPending ? (
             <>
@@ -126,9 +141,9 @@ export function LoginForm() {
           )}
         </button>
 
-        <div className="relative flex items-center justify-center my-4">
-          <div className="border-t border-zinc-200 dark:border-zinc-800 w-full" />
-          <span className="bg-white dark:bg-zinc-900 px-3 text-xs text-zinc-400 uppercase tracking-wider font-medium">
+        <div className="relative flex items-center justify-center my-5">
+          <div className="h-px bg-stone-200 dark:bg-[#1e304f] w-full" />
+          <span className="absolute bg-white dark:bg-[#152238] px-3 text-xs font-bold text-stone-400 dark:text-[#91a5c2] uppercase tracking-widest">
             atau
           </span>
         </div>
@@ -136,22 +151,32 @@ export function LoginForm() {
         <button
           type="button"
           onClick={() => demoLoginAction(redirectTo)}
-          className="w-full py-2.5 px-4 rounded-xl text-zinc-700 dark:text-zinc-300 font-medium bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700 transition-all flex items-center justify-center gap-2 text-sm cursor-pointer shadow-2xs"
+          className="clay-btn-secondary w-full py-3 px-4 rounded-2xl font-semibold flex items-center justify-center gap-2.5 text-sm cursor-pointer border border-stone-200/50 dark:border-[#1e304f]/80"
         >
-          <svg className="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-            <polyline points="10 17 15 12 10 7" />
-            <line x1="15" y1="12" x2="3" y2="12" />
-          </svg>
+          <div className="w-5 h-5 rounded-full bg-emerald-500/15 dark:bg-emerald-400/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
+            <svg
+              className="w-3.5 h-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+          </div>
           <span>Masuk Cepat Mode Demo (Pengujian)</span>
         </button>
       </form>
 
-      <div className="mt-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
+      <div className="mt-8 text-center text-sm font-medium text-stone-600 dark:text-[#91a5c2]">
         Belum memiliki akun?{' '}
         <Link
           href="/register"
-          className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
+          className="font-bold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 underline underline-offset-4 transition-colors"
         >
           Daftar sekarang
         </Link>

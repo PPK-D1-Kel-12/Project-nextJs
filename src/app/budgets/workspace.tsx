@@ -1,21 +1,30 @@
 'use client';
 
-import { useActionState, useState, type ReactNode } from 'react';
+import { useActionState, useState, useRef, useEffect, type ReactNode } from 'react';
 import { saveBudget } from '@/actions/budgets';
 import { summarizeBudget, type BudgetData, type BudgetAllocation } from '@/lib/budgets';
 import { formatRupiah } from '@/lib/format';
 
-const inputClass = 'mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-sm';
-const panelClass = 'rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5';
+const inputClass = 'clay-input mt-1 block w-full px-3.5 py-2.5 text-sm font-semibold';
+const panelClass = 'clay-card p-6';
 
 function ActionForm({ children, label, confirm, disabled = false }: { children: ReactNode; label: string; confirm?: string; disabled?: boolean }) {
+  const formRef = useRef<HTMLFormElement>(null);
   const [state, action, pending] = useActionState(saveBudget, { success: false, message: '' });
-  return <form action={action} onSubmit={(event) => { if (confirm && !window.confirm(confirm)) event.preventDefault(); }} className="space-y-3">
+  const isDelete = label === 'Hapus';
+
+  useEffect(() => {
+    if (state.success && !isDelete) {
+      formRef.current?.reset();
+    }
+  }, [state, isDelete]);
+
+  return <form ref={formRef} action={action} onSubmit={(event) => { if (confirm && !window.confirm(confirm)) event.preventDefault(); }} className="space-y-3">
     <fieldset disabled={pending || disabled} className="space-y-3 disabled:opacity-60">
       {children}
-      <button className="rounded-lg px-4 py-2 text-sm font-semibold bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 disabled:opacity-50" type="submit" disabled={pending || disabled}>{pending ? 'Memproses…' : label}</button>
+      <button className={`cursor-pointer ${isDelete ? 'clay-btn-rose px-3.5 py-1.5 text-xs font-bold text-white' : 'clay-btn-primary px-5 py-2.5 text-xs font-bold'} disabled:opacity-50`} type="submit" disabled={pending || disabled}>{pending ? 'Memproses…' : label}</button>
     </fieldset>
-    {state.message && <p role={state.success ? 'status' : 'alert'} className={`text-sm ${state.success ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>{state.message}</p>}
+    {state.message && <p role={state.success ? 'status' : 'alert'} className={`text-xs font-bold ${state.success ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>{state.message}</p>}
   </form>;
 }
 
@@ -48,7 +57,7 @@ export function BudgetWorkspace({ data, month }: { data: BudgetData; month: stri
           <ul className="divide-y divide-slate-200 dark:divide-slate-800">{data.allocations.map((item) => {
             const account = data.accounts.find((entry) => entry.id === item.account_id)?.name;
             const category = data.categories.find((entry) => entry.id === item.category_id)?.name;
-            return <li key={item.id} className="py-4 space-y-4"><div className="flex flex-wrap justify-between items-center gap-4"><div><h3 className="font-semibold">{category}</h3><p className="text-sm text-slate-500 dark:text-slate-400">Dari {account}</p></div><div className="flex flex-wrap items-center gap-4"><span className="font-semibold">{formatRupiah(item.amount)}</span><button type="button" aria-expanded={editing === item.id} onClick={() => setEditing(editing === item.id ? null : item.id)} className="text-sm underline cursor-pointer">{editing === item.id ? 'Tutup' : 'Ubah'}</button><ActionForm label="Hapus" confirm={`Hapus alokasi ${category} dari ${account} untuk ${month}?`}><input type="hidden" name="operation" value="delete-allocation" /><input type="hidden" name="id" value={item.id} /></ActionForm></div></div>{editing === item.id && <AllocationForm key={`${item.id}-${item.amount}-${item.account_id}-${item.category_id}`} data={data} month={month} item={item} />}</li>;
+            return <li key={item.id} className="py-4 space-y-4"><div className="flex flex-wrap justify-between items-center gap-4"><div><h3 className="font-semibold">{category}</h3><p className="text-sm text-slate-500 dark:text-slate-400">Dari {account}</p></div><div className="flex flex-wrap items-center gap-3"><span className="font-bold text-slate-900 dark:text-white">{formatRupiah(item.amount)}</span><button type="button" aria-expanded={editing === item.id} onClick={() => setEditing(editing === item.id ? null : item.id)} className="clay-btn-secondary px-3 py-1.5 text-xs font-bold cursor-pointer">{editing === item.id ? 'Tutup' : 'Ubah'}</button><ActionForm label="Hapus" confirm={`Hapus alokasi ${category} dari ${account} untuk ${month}?`}><input type="hidden" name="operation" value="delete-allocation" /><input type="hidden" name="id" value={item.id} /></ActionForm></div></div>{editing === item.id && <AllocationForm key={`${item.id}-${item.amount}-${item.account_id}-${item.category_id}`} data={data} month={month} item={item} />}</li>;
           })}</ul>}
       </section>
       <div className="grid md:grid-cols-2 gap-6">{(['account', 'category'] as const).map((kind) => {
