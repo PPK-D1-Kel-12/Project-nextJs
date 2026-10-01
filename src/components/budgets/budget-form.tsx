@@ -99,15 +99,12 @@ export function BudgetForm({
   const currentNumeric = parseFloat(amountStr.replace(/[^0-9]/g, '')) || 0;
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-xs space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-100 dark:border-slate-800/60 pb-5">
+    <div className="clay-card p-6 sm:p-7 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200/60 dark:border-slate-800/80 pb-5">
         <div>
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+          <h2 className="text-lg font-extrabold text-slate-900 dark:text-white">
             Tetapkan Target Anggaran
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-            Pilih periode dan masukkan target pengeluaran bulanan Anda.
-          </p>
         </div>
 
         {/* Period Pickers */}
@@ -116,7 +113,7 @@ export function BudgetForm({
             value={selectedMonth}
             onChange={handleMonthChange}
             disabled={isPending}
-            className="px-3 py-2 text-sm font-medium rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white transition-all cursor-pointer"
+            className="clay-input px-3.5 py-2 text-xs sm:text-sm font-bold cursor-pointer"
           >
             {MONTH_NAMES.map((name, idx) => (
               <option key={name} value={idx + 1}>
@@ -129,7 +126,7 @@ export function BudgetForm({
             value={selectedYear}
             onChange={handleYearChange}
             disabled={isPending}
-            className="px-3 py-2 text-sm font-medium rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white transition-all cursor-pointer"
+            className="clay-input px-3.5 py-2 text-xs sm:text-sm font-bold cursor-pointer"
           >
             {[2025, 2026, 2027, 2028].map((yr) => (
               <option key={yr} value={yr}>
@@ -142,18 +139,18 @@ export function BudgetForm({
 
       {/* Alert Messages */}
       {errorMsg && (
-        <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-950/40 dark:border-rose-900/60 dark:text-rose-300 text-sm flex items-center justify-between">
+        <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-300 text-xs font-bold flex items-center justify-between">
           <span>{errorMsg}</span>
-          <button type="button" onClick={() => setErrorMsg(null)} className="text-xs underline ml-2 cursor-pointer">
+          <button type="button" onClick={() => setErrorMsg(null)} className="text-xs underline ml-2 cursor-pointer font-bold">
             Tutup
           </button>
         </div>
       )}
 
       {successMsg && (
-        <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-900/60 dark:text-emerald-300 text-sm flex items-center justify-between">
+        <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-bold flex items-center justify-between">
           <span>{successMsg}</span>
-          <button type="button" onClick={() => setSuccessMsg(null)} className="text-xs underline ml-2 cursor-pointer">
+          <button type="button" onClick={() => setSuccessMsg(null)} className="text-xs underline ml-2 cursor-pointer font-bold">
             Tutup
           </button>
         </div>
@@ -161,11 +158,11 @@ export function BudgetForm({
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
             Target Nominal Anggaran
           </label>
           <div className="relative">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-400">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400">
               Rp
             </span>
             <input
@@ -175,19 +172,19 @@ export function BudgetForm({
               onChange={(e) => setAmountStr(e.target.value)}
               placeholder="Contoh: 5000000"
               disabled={isPending}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white transition-all text-base font-semibold"
+              className="clay-input w-full pl-12 pr-4 py-2.5 text-base font-bold font-mono placeholder:text-slate-400"
             />
           </div>
           {currentNumeric > 0 && (
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 font-medium">
-              Terbaca: <span className="font-semibold text-slate-900 dark:text-white">{formatRupiah(currentNumeric)}</span>
+              Terbaca: <span className="font-extrabold font-mono text-sky-600 dark:text-sky-400">{formatRupiah(currentNumeric)}</span>
             </p>
           )}
         </div>
 
         {/* Quick Presets */}
         <div>
-          <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
             Pilihan Nominal Cepat
           </label>
           <div className="flex flex-wrap gap-2">
@@ -197,7 +194,7 @@ export function BudgetForm({
                 type="button"
                 onClick={() => setAmountStr(String(p))}
                 disabled={isPending}
-                className="px-2.5 py-1.5 text-xs font-medium rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+                className="clay-btn-secondary px-3 py-1.5 text-xs font-bold transition-all cursor-pointer"
               >
                 {formatRupiah(p)}
               </button>
@@ -212,7 +209,7 @@ export function BudgetForm({
               type="button"
               onClick={handleDelete}
               disabled={isPending}
-              className="px-4 py-2.5 text-xs sm:text-sm font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl transition-colors cursor-pointer"
+              className="clay-btn-rose px-4 py-2 text-xs font-bold text-white transition-colors cursor-pointer"
             >
               Hapus Anggaran
             </button>
@@ -223,7 +220,7 @@ export function BudgetForm({
           <button
             type="submit"
             disabled={isPending}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-slate-950 text-sm font-semibold transition-all cursor-pointer shadow-xs disabled:opacity-50"
+            className="clay-btn-primary px-6 py-2.5 text-xs sm:text-sm font-bold cursor-pointer disabled:opacity-50"
           >
             {isPending ? 'Menyimpan...' : currentBudget ? 'Perbarui Anggaran' : 'Simpan Anggaran'}
           </button>
