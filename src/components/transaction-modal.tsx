@@ -120,17 +120,17 @@ function TransactionModalContent({
       }}
     >
       <div
-        className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-150"
+        className="clay-card w-full max-w-lg p-6 sm:p-7 space-y-5 overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-150"
         role="dialog"
         aria-modal="true"
       >
         {/* Modal Header */}
-        <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
+        <div className="pb-4 border-b border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+            <h2 className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
               {isEditing ? 'Ubah Transaksi' : 'Tambah Transaksi Baru'}
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
               {isEditing
                 ? 'Perbarui rincian transaksi yang telah dicatat (SRS-09)'
                 : 'Catat pemasukan atau pengeluaran keuangan Anda (SRS-07)'}
@@ -140,22 +140,22 @@ function TransactionModalContent({
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50"
+            className="clay-btn-secondary w-9 h-9 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 6 6 18M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         {/* Modal Body / Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2.5">
-              <svg className="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-300 text-xs font-bold flex items-start gap-2.5">
+              <svg className="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
-                <line x1="12" x2="12" y1="8" y2="12" />
-                <line x1="12" x2="12.01" y1="16" y2="16" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
               </svg>
               <span>{error}</span>
             </div>
@@ -163,20 +163,20 @@ function TransactionModalContent({
 
           {/* Segmented Type Toggle (Pemasukan vs Pengeluaran) */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
               Jenis Transaksi
             </label>
-            <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl">
+            <div className="clay-pod grid grid-cols-2 gap-2 p-1.5 rounded-2xl">
               <button
                 type="button"
                 onClick={() => setType('INCOME')}
-                className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+                className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                   type === 'INCOME'
-                    ? 'bg-emerald-600 text-white shadow-xs'
+                    ? 'clay-btn-emerald'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m7 7 10 10" />
                   <path d="M17 7v10H7" />
                 </svg>
@@ -185,13 +185,13 @@ function TransactionModalContent({
               <button
                 type="button"
                 onClick={() => setType('EXPENSE')}
-                className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+                className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                   type === 'EXPENSE'
-                    ? 'bg-rose-600 text-white shadow-xs'
+                    ? 'clay-btn-rose'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M7 17 17 7" />
                   <path d="M7 7h10v10" />
                 </svg>
@@ -203,17 +203,17 @@ function TransactionModalContent({
           {/* Nominal Input */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label htmlFor="amount" className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              <label htmlFor="amount" className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Nominal (Rp)
               </label>
               {formattedPreview && (
-                <span className="text-xs font-semibold font-mono text-slate-700 dark:text-slate-300">
+                <span className="text-xs font-extrabold font-mono text-sky-600 dark:text-sky-400">
                   {formattedPreview}
                 </span>
               )}
             </div>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-sm font-semibold">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 text-sm font-bold">
                 Rp
               </div>
               <input
@@ -225,14 +225,14 @@ function TransactionModalContent({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 required
-                className="w-full pl-11 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-400 focus:outline-hidden transition-all"
+                className="clay-input w-full pl-12 pr-4 py-2.5 text-sm font-bold font-mono placeholder:text-slate-400"
               />
             </div>
           </div>
 
           {/* Tanggal Input */}
           <div>
-            <label htmlFor="date" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
+            <label htmlFor="date" className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
               Tanggal Transaksi
             </label>
             <input
@@ -241,13 +241,13 @@ function TransactionModalContent({
               value={date}
               onChange={(e) => setDate(e.target.value)}
               required
-              className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-400 focus:outline-hidden transition-all"
+              className="clay-input w-full px-4 py-2.5 text-sm font-semibold"
             />
           </div>
 
           {/* Keterangan Input */}
           <div>
-            <label htmlFor="description" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
+            <label htmlFor="description" className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
               Keterangan
             </label>
             <textarea
@@ -257,24 +257,24 @@ function TransactionModalContent({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-400 focus:outline-hidden transition-all resize-none"
+              className="clay-input w-full px-4 py-2.5 text-sm font-medium placeholder:text-slate-400 resize-none"
             />
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-end gap-3">
+          <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium transition-all cursor-pointer disabled:opacity-50"
+              className="clay-btn-secondary px-5 py-2.5 text-xs font-bold cursor-pointer disabled:opacity-50"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-slate-950 text-sm font-semibold transition-all cursor-pointer disabled:opacity-50 shadow-xs"
+              className="clay-btn-primary flex items-center gap-2 px-6 py-2.5 text-xs font-bold cursor-pointer disabled:opacity-50"
             >
               {isLoading ? (
                 <>
@@ -298,12 +298,5 @@ function TransactionModalContent({
 export function TransactionModal(props: TransactionModalProps) {
   if (!props.isOpen) return null;
 
-  return (
-    <TransactionModalContent
-      key={props.transactionToEdit?.id || 'new'}
-      onClose={props.onClose}
-      onSuccess={props.onSuccess}
-      transactionToEdit={props.transactionToEdit}
-    />
-  );
+  return <TransactionModalContent {...props} />;
 }
